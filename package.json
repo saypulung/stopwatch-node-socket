@@ -1,0 +1,20 @@
+{
+  "name": "sw-node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "duplex-emitter": "^2.1.2",
+    "express": "^4.16.1",
+    "node-stopwatch": "0.0.1",
+    "reconnect": "^2.0.2",
+    "sprintf-js": "^1.1.1",
+    "timer-stopwatch": "^0.2.0"
+  }
+}
