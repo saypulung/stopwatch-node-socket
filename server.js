@@ -53,7 +53,7 @@ server.on('connection', function(stream) {
     }
   })
   stream.on('close',function(err){
-    coba=0
+    //coba=0
   	console.log('close')
   })
   stream.once('error',function(err){
