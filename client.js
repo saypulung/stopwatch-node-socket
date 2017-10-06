@@ -35,17 +35,19 @@ app.get('/run',function(req,res){
 	var reconnector =
 	reconnect(function(stream) {
   	var peer = duplexEmitter(stream);
-  	var tipe = typeof peer;
   	var has_run = 0;
-  	console.log(tipe)
-  	peer.on('ping', function(timestamp) {
-    	console.log('got ping from peer %d', timestamp);
-    	peer.emit('run',{coba:1});
-    	setTimeout(function(){
-    		
-    	},3000);
- 	 });
-
+  	
+  	if(has_run==0){
+  		peer.on('ping', function(timestamp) {
+    		console.log('got ping from peer %d', timestamp);
+    	
+    		setTimeout(function(){
+    			peer.emit('run',{coba:1});
+    			has_run = 1;	
+    			reconnector.disconnect();
+    		},1000);
+ 	 	});
+  	}
   	stream.once('error',function(e){
   		console.log('error')
   	})
@@ -55,6 +57,27 @@ app.get('/run',function(req,res){
 	res.send('run')
 })
 app.get('/stop',function(req,res){
+	var reconnector =
+	reconnect(function(stream) {
+  	var peer = duplexEmitter(stream);
+  	var has_run = 0;
+  	
+  	if(has_run==0){
+  		peer.on('ping', function(timestamp) {
+    		console.log('got ping from peer %d', timestamp);
+    	
+    		setTimeout(function(){
+    			peer.emit('run',{coba:0});
+    			has_run = 1;	
+    			reconnector.disconnect();
+    		},1000);
+ 	 	});
+  	}
+  	stream.once('error',function(e){
+  		console.log('error')
+  	})
+
+	}).connect(port, host);
 	res.send('stop')
 })
 app.listen(portapi,function(){
