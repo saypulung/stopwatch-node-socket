@@ -11,36 +11,47 @@ var host = 'localhost';
 var has_send = 0;
 const STATUS_CONNECT = 1;
 const STATUS_DISCONNECT = 2;
-
-var reconnector =
-reconnect(function(stream) {
-  var peer = duplexEmitter(stream);
-  var tipe = typeof peer;
-  console.log(tipe)
-  peer.on('ping', function(timestamp) {
-    console.log('got ping from peer %d', timestamp);
-    //peer.emit('pong', timestamp, Date.now());
-    if(has_send==0){
-    	setTimeout(function(){
-    		peer.emit('run',{coba:1})
-    		has_send = 1;
-    		reconnector.disconnect();
-    	},1)
-    }
-    
-  });
-
-  stream.once('error',function(e){
-  	console.log('error')
-  })
-
-}).connect(port, host);
-
-/*
+var status = 0;
 app.get('/',function(req,res){
+
+	var reconnector =
+	reconnect(function(stream) {
+  	var peer = duplexEmitter(stream);
+  	var tipe = typeof peer;
+  	console.log(tipe)
+  	peer.on('ping', function(timestamp) {
+    	console.log('got ping from peer %d', timestamp);
+    	setTimeout(function(){status=STATUS_CONNECT;reconnector.disconnect();},3000);
+ 	 });
+
+  	stream.once('error',function(e){
+  		console.log('error')
+  	})
+
+	}).connect(port, host);
 	res.send('root')
 })
 app.get('/run',function(req,res){
+	var reconnector =
+	reconnect(function(stream) {
+  	var peer = duplexEmitter(stream);
+  	var tipe = typeof peer;
+  	var has_run = 0;
+  	console.log(tipe)
+  	peer.on('ping', function(timestamp) {
+    	console.log('got ping from peer %d', timestamp);
+    	peer.emit('run',{coba:1});
+    	setTimeout(function(){
+    		
+    	},3000);
+ 	 });
+
+  	stream.once('error',function(e){
+  		console.log('error')
+  	})
+
+	}).connect(port, host);
+	
 	res.send('run')
 })
 app.get('/stop',function(req,res){
